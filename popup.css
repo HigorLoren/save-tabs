@@ -1,0 +1,148 @@
+body {
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+  background: white;
+  font-family: sans-serif;
+  font-size: 0.8em;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 340px;
+}
+
+a {
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+p {
+  margin: 3px 0px;
+}
+
+input {
+  border: none;
+  border-radius: 0px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 5px 10px;
+}
+
+.button {
+  background-color: #555555;
+  border: none;
+  color: white;
+  padding: 8px 3px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#addSession {
+  width: 40%;
+  text-align: center;
+}
+
+#sessions {
+  width: 100%;
+  /* padding-bottom: 8px; */
+}
+
+.session {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: 0.15s;
+  transition-delay: 0s;
+  min-width: 2%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.divSessionActions {
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.divSessionContent {
+  width: 80%;
+  padding: 5px 11px;
+}
+
+.session .deleteIcon {
+  background: #9f9f9f;
+  color: rgba(0, 0, 0, 0.5);
+  border-radius: 100px;
+  font-weight: var(--medium);
+  letter-spacing: -0.1px;
+  line-height: 12px;
+  font-size: 12px;
+  cursor: pointer;
+  position: relative;
+  height: 20px;
+  width: 20px;
+}
+
+.session .deleteIcon:hover {
+  background: #717171;
+}
+
+.session .deleteIcon:before{
+  background: url(./delete.svg);
+  opacity: 0.7;
+  right: 3px;
+  content: '';
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  top: 2px;
+  position: absolute;
+}
+
+#newSession {
+  width: 100%;
+  height: 25px;
+  font-weight: 700;
+  font-size: 14px;
+  color: rgb(17, 17, 17);
+}
+
+#newSession a {
+  padding: 7px 5px;
+  width: 35%;
+  font-size: 0.8rem;
+}
+
+#newSession input {
+  width: 100%;
+  border-top: 1px solid #d0d0d0;
+}
+
+#newSession input:focus {
+  outline: none !important;
+}
