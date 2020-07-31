@@ -5,17 +5,30 @@
   </head>
 
   <body>
-    <header>
-      <p class="title">Sessions</p>
-      <a class="button" id="addSession" href="#">Save current tabs</a>
-    </header>
-
-    <div id="sessions"></div>
-
-    <div id="newSession" style="display: none;">
-      <input type="text" id="inputNewSession" />
-      <a href="#" class="button" id="buttonNewSession">Save</a>
+    <div id="sessions-page" class="show">
+      <header>
+        <p class="title">Sessions</p>
+        <a class="button" id="addSession" href="#">Save current tabs</a>
+      </header>
+  
+      <div id="sessions"></div>
+  
+      <div id="newSession" style="display: none;">
+        <input type="text" id="inputNewSession" />
+        <a href="#" class="button" id="btnNewSession">Save</a>
+      </div>
     </div>
+
+    <div id="links-page">
+      <header>
+        <p class="title">Links in <span id="sessionName"></span></p>
+        <a class="button" id="btnOpenLinks" href="#">Open All</a>
+      </header>
+
+      <div id="linksList"></div>
+    </div>
+
+    <span class="spacer"/>
 
     <script src="popup.js"></script>
   </body>

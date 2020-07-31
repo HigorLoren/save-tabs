@@ -28,7 +28,7 @@ const addTabs = (newSession) => {
         if (storage["sessions"] !== undefined) {
           newSessions = storage["sessions"].length > 0 ? storage["sessions"] : [];
         }
-        newSessions.push({ id: Math.random().toString(16).slice(2) * 100, name: newSession, tabsCount: tabsCount, tabs: tabsForSave });
+        newSessions.push({ session_id: Math.random().toString(16).slice(2), name: newSession, tabsCount: tabsCount, tabs: tabsForSave });
         chrome.storage.sync.set({ sessions: newSessions }, loadSession);
       });
     }
@@ -46,11 +46,13 @@ const loadSession = () => {
         });
 
         let divSession = document.createElement("div");
-        divSession.addEventListener("onclick", (e) => openTabs(e), false);
-        divSession.setAttribute("links", JSON.stringify(linksToOpen));
         divSession.classList.add("session");
+        divSession.setAttribute("links", JSON.stringify(linksToOpen));
+        divSession.setAttribute("session_id", session["session_id"]);
 
         let divSessionContent = document.createElement("div");
+        divSessionContent.addEventListener("onclick", (e) => openTabs(e), false);
+        divSessionContent.setAttribute("session_id", session["session_id"]);
         divSessionContent.classList.add("divSessionContent");
 
         let pSessionName = document.createElement("p");
@@ -70,7 +72,7 @@ const loadSession = () => {
 
         let divIconDelete = document.createElement("div");
         divIconDelete.classList.add("deleteIcon");
-        divIconDelete.setAttribute("session_id", session["id"]);
+        divIconDelete.setAttribute("session_id", session["session_id"]);
         divIconDelete.addEventListener(
           "click",
           function (e) {
@@ -86,20 +88,63 @@ const loadSession = () => {
           false
         );
         divSessionActions.appendChild(divIconDelete);
+        
+        let divIconMore = document.createElement("div");
+        divIconMore.classList.add("moreIcon");
+        divIconMore.setAttribute("session_id", session["session_id"]);
+        divIconMore.addEventListener(
+          "click",
+          function (e) {
+            document.getElementById("links-page").classList.add("show");
+            document.getElementById("sessions-page").classList.remove("show");
+
+            let linksJson = document.querySelectorAll(`.session[session_id='${e.target.getAttribute("session_id")}']`)[0].getAttribute("links")
+
+            JSON.parse(linksJson).forEach(link => {
+              let linkDiv = document.createElement("div");
+              linkDiv.classList.add("linkDiv");
+              linkDiv.textContent = link
+              document.getElementById("linksList").appendChild(linkDiv);
+            })
+          },
+          false
+        );
+        divSessionActions.appendChild(divIconMore);
 
         divSession.appendChild(divSessionActions);
 
         document.getElementById("sessions").appendChild(divSession);
 
-        var listOfSessionLink = document.getElementsByClassName("session");
+        var listOfSessionLink = document.getElementsByClassName("divSessionContent");
         for (let item of listOfSessionLink) {
           item.addEventListener(
             "click",
             function (e) {
-          chrome.windows.create({
-                focused: true,
-                state: "maximized",
-                url: JSON.parse(item.getAttribute("links")),
+              e.preventDefault()
+
+              let linksJson = document.querySelectorAll(`.session[session_id='${item.getAttribute("session_id")}']`)[0].getAttribute("links")
+
+              chrome.tabs.query({currentWindow: true}, (tabs) => {
+                if (tabs.length === 1) {
+                  if (tabs[0].url == "chrome://newtab/") {
+                    chrome.tabs.remove(tabs[0].id);
+                    JSON.parse(linksJson).forEach(link => {
+                      chrome.tabs.create({url: link, active: false});
+                    });
+                  } else {
+                    chrome.windows.create({
+                      focused: true,
+                      state: "maximized",
+                      url: JSON.parse(linksJson),
+                    });
+                  }
+                } else {
+                  chrome.windows.create({
+                    focused: true,
+                    state: "maximized",
+                    url: JSON.parse(linksJson),
+                  });
+                }
               });
             },
             false
@@ -114,7 +159,18 @@ document.addEventListener("DOMContentLoaded", function () {
   // chrome.storage.sync.set({ sessions: [] });
   loadSession();
 
-  document.getElementById("buttonNewSession").addEventListener(
+  document.getElementById("inputNewSession").addEventListener(
+    "keypress",
+    (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault;
+        addTabs(document.getElementById("inputNewSession").value);
+      }
+    },
+    false
+  );
+
+  document.getElementById("btnNewSession").addEventListener(
     "click",
     (e) => {
       e.preventDefault;

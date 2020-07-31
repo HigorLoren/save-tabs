@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Arrow Icon</title>
+    <desc>A simple Arrow Icon</desc>
+    <defs>
+        <polygon id="path-1" points="8 3.5 1.915 3.5 4.7075 0.7075 4 0 0 4 4 8 4.7075 7.2925 1.915 4.5 8 4.5"></polygon>
+        <rect id="path-3" x="0" y="0" width="8" height="8"></rect>
+    </defs>
+    <g id="Chrome" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Arrow-Icon" transform="translate(-226.000000, -195.000000)">
+            <g id="Arrow-Left" transform="translate(232.000000, 201.000000) scale(-1, 1) translate(-232.000000, -201.000000) translate(228.000000, 197.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Shape" fill-rule="nonzero"></g>
+                <g id="Black" mask="url(#mask-2)">
+                    <mask id="mask-4" fill="white">
+                        <use xlink:href="#path-3"></use>
+                    </mask>
+                    <use id="Rectangular" fill="#000000" fill-rule="evenodd" xlink:href="#path-3"></use>
+                    <g id="Simple" mask="url(#mask-4)" opacity="0.100000001">
+                        <rect id="Rectangular" x="0" y="0" width="8" height="8"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
