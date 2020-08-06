@@ -9,10 +9,12 @@ body {
 }
 
 a {
-  white-space: nowrap;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #222222;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #555555;
 }
 
 p {
@@ -29,6 +31,7 @@ p {
 input {
   border: none;
   border-radius: 0px;
+  outline: none;
 }
 
 header {
@@ -59,66 +62,57 @@ header {
 
 .title {
   font-size: 14px;
-  font-weight: bold;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-#sessions-page {
+.page {
   display: none;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-#links-page {
-  display: none;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
 header .button {
-  width: 40%;
   text-align: center;
+  padding: 8px 10px;
 }
 
 #sessions {
   width: 100%;
-  /* padding-bottom: 8px; */
 }
 
 .session {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  transition: 0.15s;
-  transition-delay: 0s;
-  min-width: 2%;
-  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.divSessionContent {
-  width: 75%;
+.session .content {
+  width: 100%;
   padding: 5px 11px;
   cursor: pointer;
+  transition: padding .1s ease;
 }
 
-.divSessionContent:hover p {
+.session .content:hover {
+  padding: 5px 13px;
+}
+
+.session .content:hover p {
   color: #585858;
 }
 
-.divSessionActions {
+.session .actions {
   width: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.session .deleteIcon {
+.session .actions .deleteIcon {
   letter-spacing: -0.1px;
   line-height: 12px;
   position: relative;
@@ -126,11 +120,11 @@ header .button {
   width: 20px;
 }
 
-.session .divSessionActions div:hover {
+.session .actions div:hover {
   opacity: 1;
 }
 
-.session .divSessionActions div {
+.session .actions div {
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -149,12 +143,31 @@ header .button {
   background: url(./images/close.svg);
 }
 
-.session .divSessionContent:hover ~ .divSessionActions .deleteIcon {
+.moreIcon {
+  background: url(./images/more.svg);
+}
+
+.gobackIcon {
   background: url(./images/arrow.svg);
 }
 
-.moreIcon {
-  background: url(./images/more.svg);
+.editIcon {
+  background: url(./images/edit.svg);
+}
+
+#btnBackSessions .gobackIcon {
+  height: 10px;
+  width: 10px;
+  filter: invert(1);
+  transform: rotate(180deg);
+  color: #fff;
+  margin-right: 6px;
+}
+
+#btnBackSessions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #newSession {
@@ -178,4 +191,58 @@ header .button {
 
 #newSession input:focus {
   outline: none !important;
+}
+
+.linkDiv {
+  padding: 4px 7px;
+  box-sizing: border-box;
+  max-width: 340px;
+}
+
+.linkDiv a {
+  display: block;
+  white-space: nowrap;
+  max-width: calc(100vw - 30px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+
+#openSessionName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 6px 10px 6px 28px;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 32px;
+  font-family: sans-serif;
+  background: transparent;
+  resize: none;
+  border: none;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  margin-right: 10px;
+}
+
+#openSessionName:focus {
+  background-color: #eae5e5;
+  outline: none;
+  cursor: text;
+}
+
+#headerOpenSessionName {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+#headerOpenSessionName .editIcon {
+  height: 15px;
+  width: 15px;
+  position: absolute;
+  pointer-events: none;
+  top: calc(50% - 8px);
+  left: 7px;
 }

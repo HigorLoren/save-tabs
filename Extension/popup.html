@@ -5,24 +5,26 @@
   </head>
 
   <body>
-    <div id="sessions-page" class="show">
+    <div id="sessions-page" class="show page">
       <header>
         <p class="title">Sessions</p>
         <a class="button" id="addSession" href="#">Save current tabs</a>
       </header>
   
       <div id="sessions"></div>
-  
+
       <div id="newSession" style="display: none;">
         <input type="text" id="inputNewSession" />
         <a href="#" class="button" id="btnNewSession">Save</a>
       </div>
     </div>
 
-    <div id="links-page">
+    <div id="links-page" class="page">
       <header>
-        <p class="title">Links in <span id="sessionName"></span></p>
-        <a class="button" id="btnOpenLinks" href="#">Open All</a>
+        <div id="headerOpenSessionName">
+          <textarea id="openSessionName" contenteditable></textarea><div class="editIcon"></div>
+        </div>
+        <a class="button" id="btnBackSessions" href="#"><div class="gobackIcon"></div> Sessions</a>
       </header>
 
       <div id="linksList"></div>
