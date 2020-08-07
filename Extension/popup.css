@@ -1,31 +1,36 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
 body {
   overflow: hidden;
   margin: 0px;
   padding: 0px;
-  background: white;
   font-family: sans-serif;
-  font-size: 0.8em;
   width: 340px;
 }
 
-a {
-  color: #222222;
+a:not(.btn) {
+  width: 100%;
+  font-size: 12px;
   text-decoration: none;
+  color: #222222;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-a:visited {
-  color: #555555;
+a:not(.btn):hover {
+  text-decoration: underline;
+  color: #444444;
 }
 
 p {
   margin: 3px 0px;
-}
-
-.spacer {
-  width: 100%;
-  height: 1px;
-  margin: 0;
-  padding: 0;
 }
 
 input {
@@ -42,14 +47,13 @@ header {
   padding: 5px 10px;
 }
 
-.button {
+.btn {
   background-color: #555555;
   border: none;
   color: white;
   padding: 8px 3px;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
 }
 
 .bold {
@@ -82,12 +86,12 @@ header .button {
   width: 100%;
 }
 
-.session {
+.session, .tab {
   display: flex;
   align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 4px 7px;
+  box-sizing: border-box;
+  justify-content: space-between;
 }
 
 .session .content {
@@ -105,110 +109,98 @@ header .button {
   color: #585858;
 }
 
+.icon {
+  vertical-align: middle;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  box-sizing: border-box;
+  min-width: 5px;
+  min-height: 5px;
+  display: inline-block;
+}
+
+.deleteIcon {
+  background-image: url(./icons/thrash-alt.svg);
+}
+
+.moreIcon {
+  background-image: url(./icons/menu-hambuger.svg);
+}
+
+.gobackIcon {
+  background-image: url(./icons/arrow-chevron.svg);
+}
+
+.editIcon {
+  background-image: url(./icons/edit-alt.svg);
+}
+
+.favicon {
+  margin-right: 4px;
+  width: 11px;
+  height: 11px;
+}
+
 .session .actions {
-  width: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.session .actions .deleteIcon {
-  letter-spacing: -0.1px;
-  line-height: 12px;
-  position: relative;
-  height: 20px;
-  width: 20px;
-}
-
-.session .actions div:hover {
-  opacity: 1;
-}
-
-.session .actions div {
+.actions > .icon, .tab > .icon {
   display: inline-block;
   width: 12px;
   height: 12px;
-  margin: 0 9px;
   cursor: pointer;
-  vertical-align: baseline;
-  position: relative;
-  background-size: 12px 12px;
-  background-position: center;
-  background-repeat: no-repeat;
-  top: -1px;
   opacity: 0.5;
+  padding: 0 9px;
+  box-sizing: border-box;
 }
 
-.deleteIcon {
-  background: url(./images/close.svg);
+.actions .icon:hover, .tab .icon:hover {
+  opacity: 1;
 }
 
-.moreIcon {
-  background: url(./images/more.svg);
+header .btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
 }
 
-.gobackIcon {
-  background: url(./images/arrow.svg);
-}
-
-.editIcon {
-  background: url(./images/edit.svg);
-}
-
-#btnBackSessions .gobackIcon {
-  height: 10px;
-  width: 10px;
+#btnBackToSessions .gobackIcon {
+  height: 12px;
+  width: 12px;
   filter: invert(1);
-  transform: rotate(180deg);
   color: #fff;
   margin-right: 6px;
 }
 
-#btnBackSessions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#newSession {
+#saveNewSession {
   width: 100%;
-  height: 25px;
-  font-weight: 700;
   font-size: 14px;
   color: rgb(17, 17, 17);
 }
 
-#newSession a {
+#saveNewSession a {
   padding: 7px 5px;
   width: 35%;
   font-size: 0.8rem;
 }
 
-#newSession input {
+#saveNewSession input {
   width: 100%;
   border-top: 1px solid #d0d0d0;
+  padding: 2px 11px;
 }
 
-#newSession input:focus {
+#saveNewSession input:focus {
   outline: none !important;
 }
 
-.linkDiv {
-  padding: 4px 7px;
-  box-sizing: border-box;
-  max-width: 340px;
-}
 
-.linkDiv a {
-  display: block;
-  white-space: nowrap;
-  max-width: calc(100vw - 30px);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 12px;
-}
-
-#openSessionName {
+#selectedSessionName {
   font-size: 0.95rem;
   font-weight: 700;
   padding: 6px 10px 6px 28px;
@@ -225,24 +217,28 @@ header .button {
   margin-right: 10px;
 }
 
-#openSessionName:focus {
+#selectedSessionName:focus {
   background-color: #eae5e5;
   outline: none;
   cursor: text;
 }
 
-#headerOpenSessionName {
+#headerSelectedSessionName {
   display: flex;
   align-items: center;
   width: 100%;
   position: relative;
 }
 
-#headerOpenSessionName .editIcon {
+#headerSelectedSessionName .editIcon {
   height: 15px;
   width: 15px;
   position: absolute;
   pointer-events: none;
   top: calc(50% - 8px);
   left: 7px;
+}
+
+#tabs {
+  width: 100%;
 }

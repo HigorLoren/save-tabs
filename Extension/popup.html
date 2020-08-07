@@ -8,29 +8,27 @@
     <div id="sessions-page" class="show page">
       <header>
         <p class="title">Sessions</p>
-        <a class="button" id="addSession" href="#">Save current tabs</a>
+        <a class="btn" id="btnAddSession" href="#">Save current tabs</a>
       </header>
   
       <div id="sessions"></div>
 
-      <div id="newSession" style="display: none;">
-        <input type="text" id="inputNewSession" />
-        <a href="#" class="button" id="btnNewSession">Save</a>
+      <div id="saveNewSession" style="display: none;">
+        <input type="text" maxlength="31" id="newSessionName" />
+        <a href="#" class="btn" id="btnSaveNewSession">Save</a>
       </div>
     </div>
 
-    <div id="links-page" class="page">
+    <div id="tabs-page" class="page">
       <header>
-        <div id="headerOpenSessionName">
-          <textarea id="openSessionName" contenteditable></textarea><div class="editIcon"></div>
+        <div id="headerSelectedSessionName">
+          <input id="selectedSessionName" contenteditable></input><div class="editIcon icon"></div>
         </div>
-        <a class="button" id="btnBackSessions" href="#"><div class="gobackIcon"></div> Sessions</a>
+        <a class="btn" id="btnBackToSessions" href="#"><div class="gobackIcon icon"></div> Sessions</a>
       </header>
 
-      <div id="linksList"></div>
+      <div id="tabs"></div>
     </div>
-
-    <span class="spacer"/>
 
     <script src="popup.js"></script>
   </body>
