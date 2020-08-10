@@ -3,22 +3,25 @@ const saveNewSession = newSessionName => {
   document.getElementById("newSessionName").value = "";
 
   chrome.tabs.query({currentWindow: true, windowType: "normal"}, tabs => {
-    let tabsForSave = tabs.map(tab => ({
-      id: String(tab.id),
-      title: tab.title,
-      url: tab.url,
-      favIconUrl: tab.favIconUrl ? tab.favIconUrl : ""
-    }));
+    let tabsForSave = tabs.map(tab => {
+      let favIconUrl = tab.favIconUrl ? tab.favIconUrl : "";
 
-    chrome.storage.sync.get(["sessions"], (storage) => {
-      let newSessions = [];
+      return {
+        id: String(tab.id),
+        title: tab.title,
+        url: tab.url,
+        favIconUrl: favIconUrl.length < 100 ? favIconUrl : ""
+      };
+    });
 
-      if (storage.sessions !== undefined) {
-        newSessions = storage.sessions.length > 0 ? storage.sessions : [];
+    let id = Math.random().toString(16).slice(2);
+    let newSession = { id: id, name: newSessionName, tabsCount: tabsForSave.length, tabs: tabsForSave };
+    chrome.storage.sync.set({ [id]: newSession }, () => {
+      if(chrome.runtime.lastError) {
+        alert("Limite para a session excedido! Recomendamos no máximo 50 abas");
+      } else {
+        renderSessions();
       }
-
-      newSessions.push({ id: Math.random().toString(16).slice(2), name: newSessionName, tabsCount: tabsForSave.length, tabs: tabsForSave });
-      chrome.storage.sync.set({ sessions: newSessions }, renderSessions);
     });
   });
 };
@@ -26,10 +29,10 @@ const saveNewSession = newSessionName => {
 const openSession = e => {
   e.preventDefault();
 
-  let sessionContent = e.currentTarget || e.target; 
+  let sessionContent = e.currentTarget || e.target;
 
-  chrome.storage.sync.get(["sessions"], storage => {
-    let session = storage.sessions.find(session => session.id === sessionContent.getAttribute("session_id"));
+  chrome.storage.sync.get(null, sessions => {
+    let session = sessions[sessionContent.getAttribute("session_id")];
 
     chrome.tabs.query({currentWindow: true}, tabs => {
       if (tabs.length === 1) {
@@ -50,66 +53,66 @@ const openSession = e => {
 };
 
 const deleteSession = session_id => {
-  chrome.storage.sync.get(["sessions"], storage => {
-    chrome.storage.sync.set({
-      sessions: storage.sessions.filter(sessionFilter => sessionFilter.id !== session_id)
-    }, renderSessions);
-  });
+  chrome.storage.sync.remove(session_id, renderSessions);
 };
 
 const renderSessions = () => {
-  chrome.storage.sync.get(["sessions"], storage => {
+  chrome.storage.sync.get(null, sessions => {
     document.getElementById("sessions").innerHTML = "";
 
-    if (storage.sessions) {
-      storage.sessions.forEach(session => {
-        let divSession = document.createElement("div");
-        divSession.classList.add("session");
-        divSession.setAttribute("id", session.id);
+    if (sessions) {
+      for (let sessionId in sessions) {
+        if (sessions.hasOwnProperty(sessionId)) {
+          let session = sessions[sessionId];
 
-        let divSessionContent = document.createElement("div");
-        divSessionContent.addEventListener("click", e => openSession(e), true);
-        divSessionContent.setAttribute("session_id", session.id);
-        divSessionContent.classList.add("content");
+          let divSession = document.createElement("div");
+          divSession.classList.add("session");
+          divSession.setAttribute("id", session.id);
 
-        let pSessionName = document.createElement("p");
-        pSessionName.textContent = session.name;
-        pSessionName.classList.add("bold");
-        divSessionContent.appendChild(pSessionName);
+          let divSessionContent = document.createElement("div");
+          divSessionContent.addEventListener("click", e => openSession(e), true);
+          divSessionContent.setAttribute("session_id", session.id);
+          divSessionContent.classList.add("content");
 
-        let spanTabsCount = document.createElement("span");
-        spanTabsCount.textContent = session.tabsCount + " tabs";
-        divSessionContent.appendChild(spanTabsCount);
+          let pSessionName = document.createElement("p");
+          pSessionName.textContent = session.name;
+          pSessionName.classList.add("bold");
+          divSessionContent.appendChild(pSessionName);
 
-        divSession.appendChild(divSessionContent);
+          let spanTabsCount = document.createElement("span");
+          spanTabsCount.textContent = session.tabsCount + " tabs";
+          divSessionContent.appendChild(spanTabsCount);
 
-        let divSessionActions = document.createElement("div");
-        divSessionActions.classList.add("actions");
+          divSession.appendChild(divSessionContent);
 
-        let divIconDelete = document.createElement("div");
-        divIconDelete.classList.add("deleteIcon");
-        divIconDelete.classList.add("icon");
-        divIconDelete.addEventListener("click", () => deleteSession(session.id));
-        divSessionActions.appendChild(divIconDelete);
+          let divSessionActions = document.createElement("div");
+          divSessionActions.classList.add("actions");
 
-        let divIconMore = document.createElement("div");
-        divIconMore.classList.add("moreIcon");
-        divIconMore.classList.add("icon");
-        divIconMore.addEventListener("click", () => renderTabs(session.id));
-        divSessionActions.appendChild(divIconMore);
+          let divIconDelete = document.createElement("div");
+          divIconDelete.classList.add("deleteIcon");
+          divIconDelete.classList.add("icon");
+          divIconDelete.addEventListener("click", () => deleteSession(session.id));
+          divSessionActions.appendChild(divIconDelete);
 
-        divSession.appendChild(divSessionActions);
+          let divIconMore = document.createElement("div");
+          divIconMore.classList.add("moreIcon");
+          divIconMore.classList.add("icon");
+          divIconMore.addEventListener("click", () => renderTabs(session.id));
+          divSessionActions.appendChild(divIconMore);
 
-        document.getElementById("sessions").appendChild(divSession);
-      });
+          divSession.appendChild(divSessionActions);
+
+          document.getElementById("sessions").appendChild(divSession);
+        }
+      };
     }
   });
 };
 
 const renderTabs = session_id => {
-  chrome.storage.sync.get(["sessions"], storage => {
-    let session = storage.sessions.find(session => session.id === session_id);
-  
+  chrome.storage.sync.get(null, sessions => {
+    let session = sessions[session_id];
+
     document.getElementById("selectedSessionName").value = session.name;
     document.getElementById("selectedSessionName").setAttribute("session_id", session_id);
 
@@ -151,16 +154,13 @@ const renderTabs = session_id => {
 }
 
 const deleteTab = (tab_id, session_id) => {
-  chrome.storage.sync.get(["sessions"], storage => {
-    let newSessions = storage.sessions
-    let sessionIndex = newSessions.findIndex(session => session.id === session_id);
-
-    newSessions[sessionIndex].tabs = newSessions[sessionIndex].tabs.filter(tab => tab.id !== tab_id)
-    newSessions[sessionIndex].tabsCount -= 1;
+  chrome.storage.sync.get(null, sessions => {
+    sessions[session_id].tabs = sessions[session_id].tabs.filter(tab => tab.id !== tab_id);
+    sessions[session_id].tabsCount -= 1;
 
     document.querySelectorAll(`.tab[id='${tab_id}']`)[0].remove()
 
-    chrome.storage.sync.set({ sessions: newSessions }, renderSessions);
+    chrome.storage.sync.set({ [session_id]: sessions[session_id] }, renderSessions);
   });
 };
 
