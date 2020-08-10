@@ -8,7 +8,7 @@ const saveNewSession = newSessionName => {
 
       return {
         id: String(tab.id),
-        title: tab.title,
+        title: tab.title.substring(0, 59),
         url: tab.url,
         favIconUrl: favIconUrl.length < 100 ? favIconUrl : ""
       };
@@ -18,7 +18,7 @@ const saveNewSession = newSessionName => {
     let newSession = { id: id, name: newSessionName, tabsCount: tabsForSave.length, tabs: tabsForSave };
     chrome.storage.sync.set({ [id]: newSession }, () => {
       if(chrome.runtime.lastError) {
-        alert("Limite para a session excedido! Recomendamos no máximo 50 abas");
+        alert("Limit for session exceeded! We recomend a maximum of 40 tabs");
       } else {
         renderSessions();
       }
@@ -205,11 +205,10 @@ document.getElementById("selectedSessionName").addEventListener("keypress", e =>
 });
 
 document.getElementById("selectedSessionName").addEventListener("blur", e => {
-  chrome.storage.sync.get(["sessions"], (storage) => {
-    let sessionIndex = storage.sessions.findIndex(session => session.id === e.target.getAttribute("session_id"));
+  chrome.storage.sync.get(null, sessions => {
+    let id = e.target.getAttribute("session_id");
+    sessions[id].name = e.target.value;
 
-    storage.sessions[sessionIndex].name = e.target.value;
-
-    chrome.storage.sync.set({ sessions: storage.sessions }, renderSessions);
+    chrome.storage.sync.set({[id]: sessions[id] }, renderSessions);
   });
 });
